@@ -56,17 +56,26 @@ int     sn, nexp, dplaces;
 
 sn = aa->m_apm_sign * bb->m_apm_sign;
 
-if (sn == 0)                  /* one number is zero, result is zero */
-  {
-   if (bb->m_apm_sign == 0)
-     {
-      M_apm_log_error_msg(M_APM_RETURN, "\'m_apm_divide\', Divide by 0");
-     }
+/* test NaN first */
+ if ( (aa->m_apm_error) || (bb->m_apm_error) )
+   {
+      M_apm_log_error_msg(M_APM_RETURN, "\'m_apm_divide\', NaN division");
+      M_set_to_error(rr);
+      return;
+   }
 
-   M_set_to_error(rr);
+if (aa->m_apm_sign == 0)                  /* a is zero, result is zero */
+  {
+   M_set_to_zero(rr);
    return;
   }
 
+if (bb->m_apm_sign == 0)                  /* b is zero, Division by zero */
+  {
+    M_apm_log_error_msg(M_APM_RETURN, "\'m_apm_divide\', Divide by 0");
+    M_set_to_error(rr);
+    return;
+  }
 /*
  *    Use the original 'Knuth' method for smaller divides. On the
  *    author's system, this was the *approx* break even point before

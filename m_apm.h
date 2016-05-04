@@ -513,11 +513,16 @@ public:
 	/* Default division keeps larger of cpp_min_precision, numerator
 	   digits of precision, or denominator digits of precision. */
 	friend MAPM operator/(const MAPM &a,const MAPM &b)
-		{return a.divide(b,a.digits(b));}
+		{
+		  return a.divide(b,a.digits(b));
+		}
 
 	MAPM divide(const MAPM &m,int toDigits) const
-        	{MAPM ret;m_apm_divide(ret.val(),toDigits,cval(),
-					        m.cval());return ret;}
+        	{
+		  MAPM ret;m_apm_divide(ret.val(),toDigits,cval(),
+					m.cval());
+		  return ret;
+		}
 	MAPM divide(const MAPM &m) const {return divide(m,digits(m));}
 
 	/* Assignment arithmetic operators */
